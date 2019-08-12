@@ -1,7 +1,7 @@
 package = "nfd"
 version = "scm-1"
 source = {
-   url = "git://github.com/Alloyed/nativefiledialog.git"
+   url = "git://github.com/Vexatos/nativefiledialog.git"
 }
 description = {
    summary = "A tiny, neat C library that portably invokes native file open and save dialogs.",
