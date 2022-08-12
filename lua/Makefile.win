@@ -1,6 +1,6 @@
 # Makefile for the Lua bindings of nativefiledialog. Links to Win32 stuff, iunno
 
-NFD_CFLAGS=/D_CRT_SECURE_NO_WARNINGS /I"src/include"
+NFD_CFLAGS=/D_CRT_SECURE_NO_WARNINGS /DUNICODE /D_UNICODE /I"src/include"
 
 all: nfd.dll
 

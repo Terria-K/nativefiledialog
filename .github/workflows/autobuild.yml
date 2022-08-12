@@ -1,0 +1,56 @@
+name: Build using Luarocks
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        include:
+          - os: macOS-latest
+            luarocksPreArgs: '--lua-dir=/usr/local/opt/lua@5.1'
+            luarocksArgs: 'LUA_LIBDIR="/usr/local/opt/lua@5.1/lib"'
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Ubuntu - Install dependencies
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt -y install luarocks libgtk-3-dev
+
+    - name: Windows - Install MSVC
+      if: matrix.os == 'windows-latest'
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: win32
+
+    - name: Windows - Install dependencies
+      if: matrix.os == 'windows-latest'
+      run: |
+        choco install luarocks
+
+    - name: MacOS - Install Dependencies
+      if: matrix.os == 'macOS-latest'
+      run: |
+        export HOMEBREW_NO_INSTALL_CLEANUP=1
+        arch -x86_64 brew install lua lua@5.1 luarocks
+
+    - name: Compile nfd
+      run: |
+        luarocks ${{ matrix.luarocksPreArgs }} make --tree=luarocks lua/nfd-scm-1.rockspec ${{ matrix.luarocksArgs }}
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: nfd-${{ matrix.os }}
+        if-no-files-found: ignore
+        path: |
+          nfd.so
+          nfd.dll
