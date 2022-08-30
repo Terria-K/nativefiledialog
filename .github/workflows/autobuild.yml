@@ -53,4 +53,5 @@ jobs:
         if-no-files-found: ignore
         path: |
           nfd.so
+          nfd_zenity.so
           nfd.dll

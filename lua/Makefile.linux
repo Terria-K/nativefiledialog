@@ -5,7 +5,7 @@ GTK_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_LIBS=$(shell pkg-config --libs gtk+-3.0)
 NFD_CFLAGS=-Isrc/include
 
-all: nfd.so
+all: nfd.so nfd_zenity.so
 
 nfd.so: nfd_common.o nfd_gtk.o nfd_wrap_lua.o
 	$(CC) $(LIBFLAG) -L$(LUA_LIBDIR) $^ $(GTK_LIBS) -o $@
@@ -37,5 +37,5 @@ nfd_zenity.o: src/nfd_zenity.c
 clean: 
 	rm nfd_common.o nfd_gtk.o nfd_wrap_lua.o nfd.so
 
-install: nfd.so
-	cp nfd.so $(INST_LIBDIR)
+install: nfd.so nfd_zenity.so
+	cp nfd.so nfd_zenity.so $(INST_LIBDIR)
